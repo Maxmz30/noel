@@ -6,27 +6,41 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 export default function BasicSelect() {
-  const [age, setName] = React.useState('');
+  const [value, setValue] = React.useState('');
+  const [options, setOptions] = React.useState([]);
 
-  const handleChange = value => {
-    setName(value);
-  }
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
+  const loadData = async () => {
+    const response = await fetch('http://localhost:3001/api/data');
+    const data = await response.json();
+    setOptions(data);
+  };
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel id="demo-simple-select-label">Choix</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
-          label="Age"
+          value={value}
+          label="Choix"
           onChange={handleChange}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {
+          console.log(options)
+          /*options.map((option) => (
+            <MenuItem key={option.id} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))*/}
         </Select>
       </FormControl>
     </Box>
